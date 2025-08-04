@@ -1,28 +1,30 @@
-import DomainTracker from '../components/DomainTracker';
+import EnhancedDomainTracker from '../components/EnhancedDomainTracker';
 
 const fields = [
-  { name: 'date', label: 'Date', type: 'date' },
-  { name: 'wakeTime', label: 'Wake Time', type: 'time' },
-  { name: 'sleepTime', label: 'Sleep Time', type: 'time' },
-  { name: 'cigarettes', label: 'Cigarettes', type: 'number' },
-  { name: 'screenTime', label: 'Screen Time (hrs)', type: 'number' },
-  { name: 'gym', label: 'Gym', type: 'checkbox' },
-  { name: 'workoutDuration', label: 'Workout Duration (min)', type: 'number' },
-  { name: 'coldShower', label: 'Cold Shower', type: 'checkbox' },
-  { name: 'boxingPracticed', label: 'Boxing Practiced', type: 'checkbox' },
+  { name: 'workout', label: 'Workout Type', type: 'select', options: ['Cardio', 'Strength', 'Yoga', 'Running', 'Walking', 'Swimming', 'Other'] },
+  { name: 'duration', label: 'Duration (minutes)', type: 'number', placeholder: '30' },
+  { name: 'weight', label: 'Weight (kg)', type: 'number', placeholder: '70.5' },
+  { name: 'water', label: 'Water Intake (L)', type: 'number', placeholder: '2.5' },
+  { name: 'steps', label: 'Steps', type: 'number', placeholder: '8000' },
+  { name: 'sleep', label: 'Sleep Hours', type: 'number', placeholder: '8' },
 ];
 
 const chartConfig = {
-  type: 'bar',
   fields: [
-    { name: 'screenTime', label: 'Screen Time (hrs)' },
-    { name: 'cigarettes', label: 'Cigarettes' },
+    { name: 'weight', label: 'Weight' },
+    { name: 'water', label: 'Water Intake' },
+    { name: 'steps', label: 'Steps' },
   ],
-  colors: ['#4ade80', '#f87171'],
+  colors: ['#3B82F6', '#10B981', '#F59E0B'],
 };
 
 export default function Physical() {
   return (
-    <DomainTracker title="Physical Domain" fields={fields} storageKey="physicalData" chartConfig={chartConfig} />
+    <EnhancedDomainTracker
+      title="Physical Health Tracker"
+      fields={fields}
+      storageKey="physical-entries"
+      chartConfig={chartConfig}
+    />
   );
 }
