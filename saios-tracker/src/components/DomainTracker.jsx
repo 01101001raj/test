@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import useLocalStorage from '../hooks/useLocalStorage';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function DomainTracker({ title, fields, storageKey, chartConfig }) {
   const [entries, setEntries] = useLocalStorage(storageKey, []);
@@ -23,17 +20,16 @@ export default function DomainTracker({ title, fields, storageKey, chartConfig }
     setEntries(entries.filter(e => e.id !== id));
   };
 
-  // Prepare chart data if chartConfig provided
+  // Prepare chart data if chartConfig provided (Recharts expects array of objects)
   const chartData = React.useMemo(() => {
     if (!chartConfig) return null;
-    const labels = entries.map(e => e.date || '')
-    const datasets = chartConfig.fields.map((field, idx) => ({
-      label: field.label,
-      data: entries.map(e => Number(e[field.name] || 0)),
-      borderColor: chartConfig.colors[idx % chartConfig.colors.length],
-      backgroundColor: chartConfig.colors[idx % chartConfig.colors.length],
-    }));
-    return { labels, datasets };
+    return entries.map(e => {
+      const obj = { label: e.date || '' };
+      chartConfig.fields.forEach(f => {
+        obj[f.name] = Number(e[f.name] || 0);
+      });
+      return obj;
+    });
   }, [entries, chartConfig]);
 
   return (
@@ -86,12 +82,40 @@ export default function DomainTracker({ title, fields, storageKey, chartConfig }
 
       {/* Chart */}
       {chartConfig && chartData && (
-        <div className="bg-white dark:bg-gray-900 p-4 rounded shadow">
-          {chartConfig.type === 'bar' ? (
-            <Bar data={chartData} />
-          ) : (
-            <Line data={chartData} />
-          )}
+        <div className="bg-white dark:bg-gray-900 p-4 rounded shadow h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            {chartConfig.type === 'bar' ? (
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" />
+                <YAxis />
+                <Tooltip />
+                {chartConfig.fields.map((field, idx) => (
+                  <Bar key={field.name} dataKey={field.name} fill={chartConfig.colors[idx % chartConfig.colors.length]} />
+                ))}
+              </BarChart>
+            ) : chartConfig.type === 'line' ? (
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" />
+                <YAxis />
+                <Tooltip />
+                {chartConfig.fields.map((field, idx) => (
+                  <Line key={field.name} type="monotone" dataKey={field.name} stroke={chartConfig.colors[idx % chartConfig.colors.length]} strokeWidth={2} />
+                ))}
+              </LineChart>
+            ) : (
+              <AreaChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" />
+                <YAxis />
+                <Tooltip />
+                {chartConfig.fields.map((field, idx) => (
+                  <Area key={field.name} type="monotone" dataKey={field.name} stroke={chartConfig.colors[idx % chartConfig.colors.length]} fill={chartConfig.colors[idx % chartConfig.colors.length]} fillOpacity={0.2} />
+                ))}
+              </AreaChart>
+            )}
+          </ResponsiveContainer>
         </div>
       )}
     </div>
