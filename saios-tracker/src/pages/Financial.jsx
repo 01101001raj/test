@@ -1,24 +1,24 @@
-import DomainTracker from '../components/DomainTracker';
+import EnhancedDomainTracker from '../components/EnhancedDomainTracker';
 
 const fields = [
-  { name: 'date', label: 'Date', type: 'date' },
-  { name: 'income', label: 'Income (₹)', type: 'number' },
-  { name: 'expenseAmount', label: 'Expense Amount (₹)', type: 'number' },
-  { name: 'expenseCategory', label: 'Expense Category', type: 'select', options: ['Food', 'Travel', 'Subscription', 'Misc'] },
-  { name: 'investmentDone', label: 'Investment Done', type: 'checkbox' },
+  { name: 'income', label: 'Income (₹)', type: 'number', placeholder: '50000' },
+  { name: 'expenses', label: 'Expenses (₹)', type: 'number', placeholder: '15000' },
+  { name: 'savings', label: 'Savings (₹)', type: 'number', placeholder: '10000' },
+  { name: 'investment', label: 'Investment (₹)', type: 'number', placeholder: '5000' },
+  { name: 'category', label: 'Category', type: 'select', options: ['Salary', 'Freelance', 'Investment', 'Other'] },
 ];
 
 const chartConfig = {
-  type: 'bar',
   fields: [
-    { name: 'income', label: 'Income (₹)' },
-    { name: 'expenseAmount', label: 'Expense (₹)' },
+    { name: 'income', label: 'Income' },
+    { name: 'expenses', label: 'Expenses' },
+    { name: 'savings', label: 'Savings' },
   ],
-  colors: ['#34d399', '#f87171'],
+  colors: ['#10B981', '#EF4444', '#3B82F6'],
 };
 
 export default function Financial() {
   return (
-    <DomainTracker title="Financial Domain" fields={fields} storageKey="financialData" chartConfig={chartConfig} />
+    <EnhancedDomainTracker title="Financial Health" fields={fields} storageKey="financial" chartConfig={chartConfig} />
   );
 }
