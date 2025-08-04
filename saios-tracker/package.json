@@ -10,13 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "chart.js": "^4.5.0",
     "classnames": "^2.5.1",
     "marked": "^16.1.2",
     "react": "^19.1.0",
-    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.7.1",
+    "recharts": "^2.9.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -31,6 +30,7 @@
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "vite-plugin-pwa": "^0.18.4"
   }
 }
